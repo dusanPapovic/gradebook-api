@@ -72,23 +72,4 @@ class AuthController extends Controller
             'token' => $newToken
         ]);
     }
-
-    public function index(Request $request)
-    {
-        $name = $request->query('name', '');
-        $teachers = User::with('gradebook')->searchByName($name)->get();
-        return response()->json($teachers);
-    }
-
-    public function show(User $teacher)
-    {
-        $teacher->load(['gradebook']);
-        return response()->json($teacher);
-    }
-
-    public function getFreeTeachers()
-    {
-        $users = User::doesntHave('gradebook')->get();
-        return response()->json($users);
-    }
 }

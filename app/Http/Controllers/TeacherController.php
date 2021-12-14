@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Student;
+use App\User;
 use Illuminate\Http\Request;
-use App\Http\Requests\CreateStudentRequest;
-use App\Gradebook;
 
-class StudentController extends Controller
+class TeacherController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $name = $request->query('name', '');
+        $teachers = User::with('gradebook')->searchByName($name)->get();
+        return response()->json($teachers);
     }
 
     /**
@@ -25,32 +25,31 @@ class StudentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Gradebook $gradebook, CreateStudentRequest $request)
+    public function store(Request $request)
     {
-        $data = $request->validated();
-        $student = $gradebook->students()->create($data);
-        return response()->json($student);
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Student  $student
+     * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(Student $student)
+    public function show(User $teacher)
     {
-        //
+        $teacher->load(['gradebook.students']);
+        return response()->json($teacher);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Student  $student
+     * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Student $student)
+    public function update(Request $request, User $user)
     {
         //
     }
@@ -58,12 +57,17 @@ class StudentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Student  $student
+     * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Student $student)
+    public function destroy(User $user)
     {
-        $student->delete();
-        return response()->json($student);
+        //
+    }
+
+    public function getFreeTeachers()
+    {
+        $users = User::doesntHave('gradebook')->get();
+        return response()->json($users);
     }
 }

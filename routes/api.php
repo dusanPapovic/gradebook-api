@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GradebookController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\TeacherController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,17 +23,18 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/gradebooks/freeteachers', [AuthController::class, 'getFreeTeachers']);
-Route::post('/gradebooks', [GradebookController::class, 'store']);
-Route::get('/gradebooks', [GradebookController::class, 'index']);
-Route::get('/teachers', [AuthController::class, 'index']);
-Route::get('/teachers/{teacher}', [AuthController::class, 'show']);
-Route::get('/gradebooks/{gradebook}', [GradebookController::class, 'show']);
-Route::get('/my-gradebook', [GradebookController::class, 'myGradebook']);
-Route::post('/gradebooks/{gradebook}/students', [StudentController::class, 'store']);
-Route::post('/gradebooks/{gradebook}/comments', [CommentController::class, 'store']);
-Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
-Route::delete('/gradebooks/{gradebook}', [GradebookController::class, 'destroy']);
+Route::get('/gradebooks/freeteachers', [TeacherController::class, 'getFreeTeachers'])->middleware('auth:api');
+Route::post('/gradebooks', [GradebookController::class, 'store'])->middleware('auth:api');
+Route::get('/gradebooks', [GradebookController::class, 'index'])->middleware('auth:api');
+Route::get('/teachers', [TeacherController::class, 'index'])->middleware('auth:api');
+Route::get('/teachers/{teacher}', [TeacherController::class, 'show'])->middleware('auth:api');
+Route::get('/gradebooks/{gradebook}', [GradebookController::class, 'show'])->middleware('auth:api');
+Route::get('/my-gradebook', [GradebookController::class, 'myGradebook'])->middleware('auth:api');
+Route::post('/gradebooks/{gradebook}/students', [StudentController::class, 'store'])->middleware('auth:api');
+Route::post('/gradebooks/{gradebook}/comments', [CommentController::class, 'store'])->middleware('auth:api');
+Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->middleware('auth:api');
+Route::delete('/gradebooks/{gradebook}', [GradebookController::class, 'destroy'])->middleware('auth:api');
+Route::delete('/students/{student}', [StudentController::class, 'destroy'])->middleware('auth:api');
 
 
 Route::post('/auth/login', [AuthController::class, 'login']);
