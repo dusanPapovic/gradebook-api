@@ -25,7 +25,8 @@ Route::post('/gradebooks/create', [GradebookController::class, 'store']);
 Route::get('/', [GradebookController::class, 'index']);
 Route::get('/teachers', [AuthController::class, 'index']);
 Route::get('/teachers/{teacher}', [AuthController::class, 'show']);
-
+Route::get('/gradebooks/{gradebook}', [GradebookController::class, 'show']);
+Route::get('/my-gradebook', [GradebookController::class, 'myGradebook']);
 
 Route::post('/auth/login', [AuthController::class, 'login']);
 //Route::get('/auth/me', [AuthController::class, 'getActiveUser'])->middleware('auth:api');

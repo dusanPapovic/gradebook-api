@@ -6,6 +6,7 @@ use App\Http\Requests\CreateGradebookRequest;
 use Illuminate\Http\Request;
 use App\Gradebook;
 use App\User;
+use Illuminate\Support\Facades\Auth;
 
 class GradebookController extends Controller
 {
@@ -51,9 +52,10 @@ class GradebookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Gradebook $gradebook)
     {
-        //
+        $gradebook->load(['user']);
+        return response()->json($gradebook);
     }
 
     /**
@@ -88,5 +90,14 @@ class GradebookController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function myGradebook()
+    {
+        $user = auth()->user();
+        $gradebook = $user->gradebook;
+        $gradebook = $gradebook->load(['user']);;
+        // $gradebook->load(['user']);
+        return response()->json($gradebook);
     }
 }
