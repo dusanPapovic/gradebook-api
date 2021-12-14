@@ -23,4 +23,9 @@ class Gradebook extends Model
 
         return $query->where('name', 'like', "%{$name}%");
     }
+
+    public function students()
+    {
+        return $this->hasMany(Student::class);
+    }
 }

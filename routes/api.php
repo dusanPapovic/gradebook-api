@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GradebookController;
+use App\Http\Controllers\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,8 @@ Route::get('/teachers', [AuthController::class, 'index']);
 Route::get('/teachers/{teacher}', [AuthController::class, 'show']);
 Route::get('/gradebooks/{gradebook}', [GradebookController::class, 'show']);
 Route::get('/my-gradebook', [GradebookController::class, 'myGradebook']);
+Route::post('/gradebooks/{gradebook}/students/create', [StudentController::class, 'store']);
+
 
 Route::post('/auth/login', [AuthController::class, 'login']);
 //Route::get('/auth/me', [AuthController::class, 'getActiveUser'])->middleware('auth:api');
