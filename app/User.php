@@ -54,4 +54,13 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(Gradebook::class);
     }
+
+    public function scopeSearchByName($query, $name = "")
+    {
+        if (!$name) {
+            return $query;
+        }
+
+        return $query->where('first_name', 'like', "%{$name}%");
+    }
 }

@@ -14,4 +14,13 @@ class Gradebook extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function scopeSearchByName($query, $name = "")
+    {
+        if (!$name) {
+            return $query;
+        }
+
+        return $query->where('name', 'like', "%{$name}%");
+    }
 }

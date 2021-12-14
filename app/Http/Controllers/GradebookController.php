@@ -14,9 +14,11 @@ class GradebookController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $name = $request->query('name', '');
+        $gradebooks = Gradebook::with('user')->searchByName($name)->orderBy('id', 'DESC')->paginate(2);
+        return response()->json($gradebooks);
     }
 
     /**
@@ -26,8 +28,6 @@ class GradebookController extends Controller
      */
     public function create()
     {
-        $users = User::doesntHave('gradebook')->get();
-        return response()->json($users);
     }
 
     /**
@@ -39,9 +39,9 @@ class GradebookController extends Controller
     public function store(CreateGradebookRequest $request)
     {
         $data = $request->validated();
-        $gradebook = Gradebook::create($data);
-        // $user = User::findOrFail($data->user_id);
-        // $gradebook = $user->gradebook()->create($data->name);
+        // $user = User::findOrFail($request->user_id);
+        $user = User::findOrFail($request->get('user_id'));
+        $gradebook = $user->gradebook()->create($data);
         return response()->json($gradebook, 201);
     }
 

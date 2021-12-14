@@ -25,7 +25,6 @@ class CreateGradebookRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:2|max:255',
-            'user_id' => 'integer|exists:users,id',
         ];
     }
 }
