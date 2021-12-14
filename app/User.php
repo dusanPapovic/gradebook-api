@@ -63,4 +63,9 @@ class User extends Authenticatable implements JWTSubject
 
         return $query->where('first_name', 'like', "%{$name}%");
     }
+
+    public function commentsOfUsers()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

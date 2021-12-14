@@ -18,7 +18,7 @@ class GradebookController extends Controller
     public function index(Request $request)
     {
         $name = $request->query('name', '');
-        $gradebooks = Gradebook::with('user', 'students')->searchByName($name)->orderBy('id', 'DESC')->paginate(2);
+        $gradebooks = Gradebook::with('user')->searchByName($name)->orderBy('id', 'DESC')->paginate(2);
         return response()->json($gradebooks);
     }
 
@@ -56,6 +56,7 @@ class GradebookController extends Controller
     {
         $gradebook->load(['user']);
         $gradebook->load(['students']);
+        $gradebook->load(['commentsOfGradebook']);
         return response()->json($gradebook);
     }
 
@@ -99,6 +100,7 @@ class GradebookController extends Controller
         $gradebook = $user->gradebook;
         $gradebook = $gradebook->load(['user']);
         $gradebook->load(['students']);
+        $gradebook->load(['commentsOfGradebook']);
         // $gradebook->load(['user']);
         return response()->json($gradebook);
     }

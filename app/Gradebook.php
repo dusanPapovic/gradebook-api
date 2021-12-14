@@ -28,4 +28,9 @@ class Gradebook extends Model
     {
         return $this->hasMany(Student::class);
     }
+
+    public function commentsOfGradebook()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }
