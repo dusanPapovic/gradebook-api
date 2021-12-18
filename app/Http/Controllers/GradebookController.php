@@ -6,6 +6,7 @@ use App\Http\Requests\CreateGradebookRequest;
 use Illuminate\Http\Request;
 use App\Gradebook;
 use App\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 
 class GradebookController extends Controller
@@ -18,7 +19,7 @@ class GradebookController extends Controller
     public function index(Request $request)
     {
         $name = $request->query('name', '');
-        $gradebooks = Gradebook::with('user')->searchByName($name)->orderBy('id', 'DESC')->paginate(2);
+        $gradebooks = Gradebook::with('user')->searchByName($name)->orderBy('id', 'DESC')->paginate(10);
         return response()->json($gradebooks);
     }
 
@@ -56,7 +57,7 @@ class GradebookController extends Controller
     {
         $gradebook->load(['user']);
         $gradebook->load(['students']);
-        $gradebook->load(['commentsOfGradebook']);
+        $gradebook->load(['commentsOfGradebook.user']);
         return response()->json($gradebook);
     }
 
@@ -98,10 +99,14 @@ class GradebookController extends Controller
     public function myGradebook()
     {
         $user = auth()->user();
+        if (!$user->gradebook) {
+            throw new ModelNotFoundException("User does not have a gradebook");
+        }
+
         $gradebook = $user->gradebook;
         $gradebook = $gradebook->load(['user']);
         $gradebook->load(['students']);
-        $gradebook->load(['commentsOfGradebook']);
+        $gradebook->load(['commentsOfGradebook.user']);
         // $gradebook->load(['user']);
         return response()->json($gradebook);
     }

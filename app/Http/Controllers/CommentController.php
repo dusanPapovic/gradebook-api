@@ -31,7 +31,7 @@ class CommentController extends Controller
 
         $data['user_id'] = auth()->id();
         $comment = $gradebook->commentsOfGradebook()->create($data);
-
+        $comment->load(['user']);
         return response()->json($comment, 201);
     }
 
